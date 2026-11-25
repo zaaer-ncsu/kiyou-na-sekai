@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>履歴書 — Two-page display</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: transparent; }
+  .resume-spread {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: 100%;
+  }
+  .resume-page {
+    background: white;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px #ddd;
+  }
+  .resume-page iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    width: 816px;
+    height: 1056px;
+    transform-origin: top left;
+    background: #fff;
+  }
+  @media (max-width: 720px) {
+    .resume-spread { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="resume-spread" aria-label="日本語の履歴書（2ページ）">
+    <div class="resume-page"><iframe src="resume-page-1.html" title="履歴書・1ページ目" loading="lazy"></iframe></div>
+    <div class="resume-page"><iframe src="resume-page-2.html" title="履歴書・2ページ目" loading="lazy"></iframe></div>
+  </div>
+<script>
+  // A normal 816 x 1056 pixel page scales proportionally to its available column.
+  const PAGE_WIDTH = 816;
+  const PAGE_HEIGHT = 1056;
+  function fitResumePages() {
+    for (const page of document.querySelectorAll('.resume-page')) {
+      const scale = page.clientWidth / PAGE_WIDTH;
+      page.style.height = `${Math.ceil(PAGE_HEIGHT * scale)}px`;
+      page.querySelector('iframe').style.transform = `scale(${scale})`;
+    }
+  }
+  fitResumePages();
+  new ResizeObserver(fitResumePages).observe(document.querySelector('.resume-spread'));
+</script>
+</body>
+</html>
